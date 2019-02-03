@@ -3,11 +3,12 @@
         <div class="App__view uk-margin-top-small uk-margin-left uk-margin-right"
              data-page="home">
             <div class="HomePage">
-                <h1>TMDb UI – Home</h1>
-                <legend class="uk-legend" data-testid={PROMPT_TESTID}>{PROMPT}</legend>
+                <!--<h1>TMDb UI – Home</h1>-->
+                <!--<legend class="uk-legend" data-testid={PROMPT_TESTID}>{PROMPT}</legend>-->
                 <div class="SearchBar uk-inline uk-margin-bottom">
                     <a
-                            class='uk-form-icon uk-form-icon-flip js-clear uk-icon={!isDiscoveryMode ? "icon:close" : "icon:search"}'>
+                            class='uk-form-icon uk-form-icon-flip js-clear uk-icon={!isDiscoveryMode ? "icon:close" : "icon:search"}'
+                            on:click='QUERY_RESETTED(next,event)'>
                     </a>
                     <input class="SearchBar__input uk-input js-input" type="text" value={query || ""}
                            on:input='QUERY_CHANGED(next,event)'
@@ -25,7 +26,8 @@
                     <ul class="uk-thumbnav">
                         {#each filteredResults as result}
                         <li class="uk-margin-bottom">
-                            <a class="ResultsContainer__result-item js-result-click" href="#"
+                            <a class="ResultsContainer__result-item js-result-click"
+                               on:click="MOVIE_SELECTED(next, event, result)"
                                data-id={result.id}>
                                 <div class="ResultsContainer__thumbnail-holder">
                                     <img src=http://image.tmdb.org/t/p/w300{result.backdrop_path}
@@ -52,7 +54,7 @@
 
 <script>
   import {
-    LOADING, NETWORK_ERROR, POPULAR_NOW, PROMPT, screens, SEARCH_RESULTS_FOR, testIds
+    LOADING, NETWORK_ERROR, POPULAR_NOW, PROMPT, screens, SEARCH_RESULTS_FOR, testIds, events
   } from "./properties"
 
   const { RESULTS_CONTAINER_TESTID, QUERY_FIELD_TESTID, RESULTS_HEADER_TESTID, PROMPT_TESTID, NETWORK_ERROR_TESTID } =
@@ -63,6 +65,7 @@
     SEARCH_RESULTS_WITH_MOVIE_DETAILS_AND_LOADING_SCREEN, SEARCH_RESULTS_WITH_MOVIE_DETAILS,
     SEARCH_RESULTS_WITH_MOVIE_DETAILS_ERROR
   } = screens;
+  const {QUERY_CHANGED, QUERY_RESETTED, MOVIE_SELECTED, MOVIE_DETAILS_DESELECTED} = events;
 
   export default {
     helpers: {
