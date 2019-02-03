@@ -1,8 +1,7 @@
 # Motivation
 This repository showcases the use of state machines to modelize user interfaces. The chosen 
 technologies are :
- - [hyperscript](https://github.com/localvoid/ivi/tree/master/packages/ivi-html) for describing the screens of the interface in a portable way
- - [ivi](https://github.com/localvoid/ivi) for rendering
+ - [svelte](https://svelte.technology/) for templating and rendering
  - [state-transducer](https://github.com/brucou/state-transducer) as state machine library
  - web components in order to have a reusable and portable implementation
  
@@ -11,6 +10,7 @@ front-end frameworks. So far, implementation exists for :
   - [inferno](https://github.com/brucou/movie-search-app-inferno)
   - [nerv](https://github.com/brucou/movie-search-app-nerv)
   - [react](https://codesandbox.io/s/kwn3lx2qx7)
+  - [ivi](https://github.com/brucou/movie-search-app-ivi)
 
 # Installation and execution
 The application is built with parcel. To run it :
