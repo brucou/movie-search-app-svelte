@@ -1,18 +1,19 @@
-<div class="App uk-light uk-background-secondary" data-activePage="home">
-    <div class="App__view-container">
+<div class="App uk-light uk-background-secondary" data-activePage="{activePage}">
+    <div class="App__view-container" on:click="MOVIE_DETAILS_DESELECTED(next, event)" >
         <div class="App__view uk-margin-top-small uk-margin-left uk-margin-right"
              data-page="home">
             <div class="HomePage">
-                <!--<h1>TMDb UI – Home</h1>-->
-                <!--<legend class="uk-legend" data-testid={PROMPT_TESTID}>{PROMPT}</legend>-->
+                <h1>TMDb UI – Home</h1>
+                <legend class="uk-legend" data-testid={PROMPT_TESTID}>{PROMPT}</legend>
                 <div class="SearchBar uk-inline uk-margin-bottom">
                     <a
                             class='uk-form-icon uk-form-icon-flip js-clear uk-icon={!isDiscoveryMode ? "icon:close" : "icon:search"}'
                             on:click='QUERY_RESETTED(next,event)'>
                     </a>
-                    <input class="SearchBar__input uk-input js-input" type="text" value={query || ""}
-                           on:input='QUERY_CHANGED(next,event)'
-                           data-testid={QUERY_FIELD_TESTID}>
+                    <input class="SearchBar__input uk-input js-input" type="text" value={query ||
+                    ""}
+                    on:input='QUERY_CHANGED(next,event)'
+                    data-testid={QUERY_FIELD_TESTID}>
                 </div>
                 <h3 class="uk-heading-bullet uk-margin-remove-top"
                     data-testid={RESULTS_HEADER_TESTID}>{isDiscoveryMode ? POPULAR_NOW :
@@ -47,6 +48,44 @@
         <div class="App__view uk-margin-top-small uk-margin-left uk-margin-right"
              data-page="item">
             {#if hasMoviePage}
+            <div>
+                <h1>{title || details && details.title}</h1>
+                {#if isLoadingMovieDetails}
+                <div>{LOADING}</div>
+                {:elseif isErrorMovieDetails}
+                <div>{NETWORK_ERROR}</div>
+                {:elseif hasDetailsResults}
+                <div class="MovieDetailsPage">
+                    <div class="MovieDetailsPage__img-container uk-margin-right" style="float: left">
+                        <img src="http://image.tmdb.org/t/p/w342{details.poster_path}" alt="" />
+                    </div>
+                    <dl class="uk-description-list">
+                        <dt>Popularity</dt>
+                        <dd>{details.vote_average}</dd>
+                        <dt>Overview</dt>
+                        <dd>{details.overview}</dd>
+                        <dt>Genres</dt>
+                        <dd>{details.genres.map(g => g.name).join(', ')}</dd>
+                        <dt>Starring</dt>
+                        <dd>{cast.cast.slice(0, 3).map(cast => cast.name).join(', ')}</dd>
+                        <dt>Languages</dt>
+                        <dd>{details.spoken_languages.map(g => g.name).join(', ')}</dd>
+                        <dt>Original Title</dt>
+                        <dd>{details.original_title}</dd>
+                        <dt>Release Date</dt>
+                        <dd>{details.release_date}</dd>
+                        {#if hasImdbId}
+                        <dt>IMDb URL</dt>
+                        <dd>
+                            <a href="https://www.imdb.com/title/{details.imdb_id}/">
+                            https://www.imdb.com/title/{details.imdb_id}/
+                            </a>
+                        </dd>
+                        {/if}
+                    </dl>
+                </div>;
+                {/if}
+            </div>
             {/if}
         </div>
     </div>
@@ -54,7 +93,7 @@
 
 <script>
   import {
-    LOADING, NETWORK_ERROR, POPULAR_NOW, PROMPT, screens, SEARCH_RESULTS_FOR, testIds, events
+    events, LOADING, NETWORK_ERROR, POPULAR_NOW, PROMPT, screens, SEARCH_RESULTS_FOR, testIds
   } from "./properties"
 
   const { RESULTS_CONTAINER_TESTID, QUERY_FIELD_TESTID, RESULTS_HEADER_TESTID, PROMPT_TESTID, NETWORK_ERROR_TESTID } =
@@ -65,7 +104,7 @@
     SEARCH_RESULTS_WITH_MOVIE_DETAILS_AND_LOADING_SCREEN, SEARCH_RESULTS_WITH_MOVIE_DETAILS,
     SEARCH_RESULTS_WITH_MOVIE_DETAILS_ERROR
   } = screens;
-  const {QUERY_CHANGED, QUERY_RESETTED, MOVIE_SELECTED, MOVIE_DETAILS_DESELECTED} = events;
+  const { QUERY_CHANGED, QUERY_RESETTED, MOVIE_SELECTED, MOVIE_DETAILS_DESELECTED } = events;
 
   export default {
     helpers: {
@@ -83,6 +122,12 @@
     computed: {
       isDiscoveryMode: ({ query }) => !query || query.length === 0,
       filteredResults: ({ results }) => results && results.filter(result => result.backdrop_path),
+      activePage: ({ screen }) => {
+        return [LOADING_SCREEN, SEARCH_RESULTS_AND_LOADING_SCREEN, SEARCH_ERROR_SCREEN, SEARCH_RESULTS_SCREEN].indexOf(screen) > -1
+          ? "home"
+          : "item"
+      },
+      hasImdbId: ({details}) => details && details.imdb_id,
       isLoadingResults: ({ screen }) => [LOADING_SCREEN, SEARCH_RESULTS_AND_LOADING_SCREEN].indexOf(screen) > -1,
       isErrorResults: ({ screen }) => [SEARCH_ERROR_SCREEN].indexOf(screen) > -1,
       hasResults: ({ screen }) => [
@@ -93,6 +138,9 @@
       hasMoviePage: ({ screen }) =>
         [SEARCH_RESULTS_WITH_MOVIE_DETAILS_AND_LOADING_SCREEN, SEARCH_RESULTS_WITH_MOVIE_DETAILS,
           SEARCH_RESULTS_WITH_MOVIE_DETAILS_ERROR].indexOf(screen) > -1,
+      isLoadingMovieDetails: ({ screen }) => [SEARCH_RESULTS_WITH_MOVIE_DETAILS_AND_LOADING_SCREEN].indexOf(screen) > -1,
+      isErrorMovieDetails: ({ screen }) => [SEARCH_RESULTS_WITH_MOVIE_DETAILS_ERROR].indexOf(screen) > -1,
+      hasDetailsResults: ({ screen }) => [SEARCH_RESULTS_WITH_MOVIE_DETAILS].indexOf(screen) > -1,
     },
     methods: {
       QUERY_CHANGED: (next, ev) => next({ [QUERY_CHANGED]: ev.target.value }),
