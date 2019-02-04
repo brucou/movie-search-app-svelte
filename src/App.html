@@ -7,7 +7,8 @@
                 <legend class="uk-legend" data-testid={PROMPT_TESTID}>{PROMPT}</legend>
                 <div class="SearchBar uk-inline uk-margin-bottom">
                     <a
-                            class='uk-form-icon uk-form-icon-flip js-clear uk-icon={!isDiscoveryMode ? "icon:close" : "icon:search"}'
+                            class='uk-form-icon uk-form-icon-flip js-clear'
+                            uk-icon={!isDiscoveryMode ? "icon:close" : "icon:search"}
                             on:click='QUERY_RESETTED(next,event)'>
                     </a>
                     <input class="SearchBar__input uk-input js-input" type="text" value={query ||
