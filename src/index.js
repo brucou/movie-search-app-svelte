@@ -1,16 +1,13 @@
-// import "../public/uikit.css";
-// import "../public/index.css";
 import App from './App.html';
-import { createStateMachine } from "state-transducer";
+import { createStateMachine, makeWebComponentFromFsm } from "state-transducer";
 import emitonoff from "emitonoff";
 import { commandHandlers, effectHandlers, movieSearchFsmDef } from "./fsm";
-import { applyJSONpatch, makeWebComponentFromFsm } from "./helpers";
 import { COMMAND_RENDER, events } from "./properties";
+import {getEventEmitterAdapter} from "./helpers"
 
 let app = void 0;
 
 const fsm = createStateMachine(movieSearchFsmDef, {
-  updateState: applyJSONpatch,
   debug: { console }
 });
 
@@ -49,7 +46,7 @@ const options = { initialEvent: { [events.USER_NAVIGATED_TO_APP]: void 0 } };
 
 makeWebComponentFromFsm({
   name: "movie-search",
-  eventSubjectFactory: subjectFromEventEmitterFactory,
+  eventHandler: getEventEmitterAdapter(emitonoff),
   fsm,
   commandHandlers: commandHandlersWithRender,
   effectHandlers,
