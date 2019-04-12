@@ -27,11 +27,10 @@ the other frameworks) :
   - rollup showed some strange errors, which we obviated by moving commonjs modules from 
   `node_modules` to the repo (superagent), and ignoring completely the warning (replacing `this` 
   for `undefined`)
-  - I observe a damnning issue with css, and had to remove the `index.css` from the `index.html`.
-   That is a build issue or compilation issue, and I do not want to investigate it.
-  - that's rollup, who knows how it would be with webpack or else. Compiling means you have to 
-  care about the build, and that can very well be a nightmare, as usual, given the high number of
-   moving parts.
+  - ~~I observe a damnning issue with css, and had to remove the `index.css` from the `index.html`.
+   That is a build issue or compilation issue, and I do not want to investigate it.~~
+  - Compiling means you have to care about the build, and that can very well be a nightmare, as 
+  usual, given the high number of moving parts.
 - the templating language has to be learnt
   - while there is a rather decent documentation, it takes some time to understand the best 
   practices
@@ -56,10 +55,10 @@ have to be factored into one template.
   from short variables, that is more readable
   - use `methods` to gather the event handlers all in one place rather than having them inline
 
-While the implementation was a nightmare, and remains unfinished (I will not investigate what is 
-goind wrong with index.css and the build), past the learning curve, the truth is Svelte is a 
+While the implementation was a nightmare (~~I will not investigate what is 
+goind wrong with index.css and the build~~), past the learning curve, the truth is Svelte is a 
 pretty nice library among template-based front-end libraries. Having all the component 
-specifications in one file is great, and that is a big progress vs. angular. By adopting 
+specifications in one file is great, and that is a big progress vs. Angular. By adopting 
 defensive practices (test behaviour change after every small code update, write readable templates)
 , it is possible to work around the absence of IDE and poor debugging support.  
 
@@ -80,5 +79,5 @@ The state machine modelizing the search application is as follows :
 ![](movie%20search%20good%20fsm%20corrected%20flowchart%20no%20emphasis%20switchMap.png)
 
 # Notes
-17K minified gzip. Probably can be brought down through better config... and substituting json 
+17K minified gzip! Probably can be brought down through better config... and substituting json 
 patch for a mere function
