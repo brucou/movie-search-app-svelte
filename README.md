@@ -19,8 +19,6 @@ The application is built with parcel. To run it :
 
 `npm run start`
 
-Alternatively, you can peruse the [codesandbox](https://codesandbox.io/s/3x9x5v4kq5).
-
 # State machine
 The state machine modelizing the search application is as follows :
 
